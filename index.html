@@ -235,19 +235,13 @@
         
           
             <ul>
-<li><p>One of the first few things bootloader aimed to do is to enable A20 line. In real mode, segment:offset can yield a 21-bit physical address. Due to compatibility, the 21st bit is always masked. So we have to open A20 line, in order to access memory above 1M in real mode.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  <span class="preprocessor"># Enable A20:</span></span><br><span class="line">  <span class="preprocessor">#   For backwards compatibility with the earliest PCs, physical</span></span><br><span class="line">  <span class="preprocessor">#   address <span class="keyword">line</span> 20 is tied low, so that addresses higher than</span></span><br><span class="line">  <span class="preprocessor">#   1MB wrap around to zero by default.  This code undoes this.</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor"># enable</span></span><br><span class="line">seta20<span class="number">.1</span>:</span><br><span class="line">  inb     $<span class="number">0x64</span>,%al               <span class="preprocessor"># Wait for not busy</span></span><br><span class="line">  testb   $<span class="number">0x2</span>,%al</span><br><span class="line">  jnz     seta20<span class="number">.1</span></span><br><span class="line"></span><br><span class="line">  movb    $<span class="number">0xd1</span>,%al               <span class="preprocessor"># 0xd1 -&gt; port 0x64</span></span><br><span class="line">  outb    %al,$<span class="number">0x64</span></span><br><span class="line"></span><br><span class="line"><span class="preprocessor"># write</span></span><br><span class="line">seta20<span class="number">.2</span>:</span><br><span class="line">  inb     $<span class="number">0x64</span>,%al               <span class="preprocessor"># Wait for not busy</span></span><br><span class="line">  testb   $<span class="number">0x2</span>,%al</span><br><span class="line">  jnz     seta20<span class="number">.2</span></span><br><span class="line"></span><br><span class="line">  movb    $<span class="number">0xdf</span>,%al               <span class="preprocessor"># 0xdf -&gt; port 0x60</span></span><br><span class="line">  outb    %al,$<span class="number">0x60</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>But what if we don’t need to visit memory above 1M in real mode? Or, if we limit our memory usage within 1M in real mode, and then jump to protect mode. Do we need to open A20 line? If A20 line is closed, will it affects memory access in protect mode?</p>
-</li>
-<li><p>Intel® 64 and IA-32 Architectures Software Developer’s Manual says that:</p>
-<blockquote>
-<p>A20M# pin — On an IA-32 processor, the A20M# pin is typically provided for compatibility with the Intel 286 processor. <strong><em>Asserting this pin causes bit 20 of the physical address to be masked (forced to zero) for all external bus memory accesses.</em></strong> Processors supporting Intel Hyper-Threading Technology provide one A20M# pin, which affects the operation of both logical processors within the physical processor. The functionality of A20M# is used primarily by older operating systems and not used by modern operating systems. On newer Intel 64 processors, A20M# may be absent.</p>
-</blockquote>
-<p>  It implies that A20 has an impact both on real mode and protect mode. However, nowadays, most of the bios help us open A20 automatically, it hard to design a small experiment to check that.</p>
-</li>
+<li>One of the first few things bootloader aimed to do is to enable A20 line. We have to open A20 line, in order to access memory above 1M in real mode. But what if we don’t need to visit memory above 1M in real mode? Or, if we limit our memory usage within 1M in real mode, and then jump to protect mode. Do we need to open A20 line? If A20 line is closed, will it affects memory access in protect mode?</li>
 </ul>
-
+            <div class="post-more-link text-center">
+              <a class="btn" href="/2015/04/12/bootloader-and-A20-line/#more">
+                Read more &raquo;
+              </a>
+            </div>
           
         
       </div>
