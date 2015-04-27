@@ -20,9 +20,9 @@
 
 
 
-	<meta name="keywords" content="唧唧歪歪," />
+	<meta name="keywords" content="OS," />
 
-  <title> 温度计 //  </title>
+  <title> good good study, day day up -- thread //  </title>
 </head>
 
 <body>
@@ -95,7 +95,7 @@
           
           
             
-              温度计
+              good good study, day day up -- thread
             
           
         </h1>
@@ -104,7 +104,7 @@
       <div class="post-meta">
         <span class="post-time">
           
-            Posted on 2014-07-30
+            Posted on 2015-04-27
           
         </span>
 
@@ -116,8 +116,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2014/07/31/2014-07-31-温度计/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/31/2014-07-31-温度计/"></span>
+            <a href="/2015/04/27/又get了一点-线程/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/27/又get了一点-线程/"></span>
             </a>
           </span>
           
@@ -133,9 +133,20 @@
 
         
           <ul>
-<li>昨天今天有些不舒服，量体温的时候甩温度计。突然想起很小很小的时候，住在外婆家。邻居甩温度计的时候失手的事。= =</li>
+<li><p>When having an interview, there are some very very common questions that interviewers love to ask, including what’s the difference between stack section and heap section? what’s the difference between thread and process?</p>
+</li>
+<li><p>For the latter one, I would alway give a common answer, that I learned from the book, in Linux, thread is just a lightweight process, it has its own stack and registers, such as eax, ebx, eip and so on, and shares the heap section. This answer may be right, or may be wrong. But there is alway one thing that I did figure out.</p>
+</li>
+<li><p>How can a thread have it own registers? Since there is only one eip/eax/esp register in each cpu. What’s the meaning of having its own register?</p>
+</li>
+<li><p>Then I got a chance to implement a OS from mit 6.828. (and it’s my github repo <a href="https://github.com/runshenzhu/6.828-MIT-OS" target="_blank" rel="external">6.828-MIT-OS</a>). Finally, I got that instead of having its own registers, every thread, and process maintains a struct, that represent its registers.</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> PushRegs &#123;</span><br><span class="line"><span class="comment">/* registers as pushed by pusha */</span></span><br><span class="line">	<span class="keyword">uint32_t</span> reg_edi;</span><br><span class="line">	<span class="keyword">uint32_t</span> reg_esi;</span><br><span class="line">	<span class="keyword">uint32_t</span> reg_ebp;</span><br><span class="line">	<span class="keyword">uint32_t</span> reg_oesp;		<span class="comment">/* Useless */</span></span><br><span class="line">	<span class="keyword">uint32_t</span> reg_ebx;</span><br><span class="line">	<span class="keyword">uint32_t</span> reg_edx;</span><br><span class="line">	<span class="keyword">uint32_t</span> reg_ecx;</span><br><span class="line">	<span class="keyword">uint32_t</span> reg_eax;</span><br><span class="line">&#125; __attribute__((packed));</span><br><span class="line"><span class="keyword">struct</span> Trapframe &#123;</span><br><span class="line">	<span class="keyword">struct</span> PushRegs tf_regs;</span><br><span class="line">	<span class="keyword">uint16_t</span> tf_es;</span><br><span class="line">	<span class="keyword">uint16_t</span> tf_padding1;</span><br><span class="line">	<span class="keyword">uint16_t</span> tf_ds;</span><br><span class="line">	<span class="keyword">uint16_t</span> tf_padding2;</span><br><span class="line">	<span class="keyword">uint32_t</span> tf_trapno;</span><br><span class="line">	<span class="comment">/* below here defined by x86 hardware */</span></span><br><span class="line">	<span class="keyword">uint32_t</span> tf_err;</span><br><span class="line">	<span class="keyword">uintptr_t</span> tf_eip;</span><br><span class="line">	<span class="keyword">uint16_t</span> tf_cs;</span><br><span class="line">	<span class="keyword">uint16_t</span> tf_padding3;</span><br><span class="line">	<span class="keyword">uint32_t</span> tf_eflags;</span><br><span class="line">	<span class="comment">/* below here only when crossing rings, such as from user to kernel */</span></span><br><span class="line">	<span class="keyword">uintptr_t</span> tf_esp;</span><br><span class="line">	<span class="keyword">uint16_t</span> tf_ss;</span><br><span class="line">	<span class="keyword">uint16_t</span> tf_padding4;</span><br><span class="line">&#125; __attribute__((packed));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>When the OS does a schedule, old thread/process saves (or we can say push) the value of its registers into this struct, and the new thread/process pops the value of this struct to registers.</p>
+</li>
+<li><p>By doing so, every thread and process seems to have its own registers.</p>
+</li>
 </ul>
-<hr>
 
         
       </div>
@@ -146,8 +157,8 @@
         
           <div class="post-tags">
             
-              <a href="/tags/唧唧歪歪/">
-                #唧唧歪歪
+              <a href="/tags/OS/">
+                #OS
               </a>
             
           </div>
@@ -157,13 +168,13 @@
           <div class="post-nav">
             <div class="post-nav-prev post-nav-item">
               
-                <a href="/2014/08/01/2014-08-01-An-easy-way-to-use-git/">SourceTree--An easy way to use git.</a>
+                <a href="/9999/09/09/9999-01-01-中文简历/">简历</a>
               
             </div>
 
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2014/07/31/2014-07-31-phpStudy/">First two weeks of studying php</a>
+                <a href="/2015/04/12/bootloader-and-A20-line/">bootloader and A20 line</a>
               
             </div>
           </div>
@@ -180,8 +191,8 @@
   
     <div class="comments" id="comments">
       
-        <div class="ds-thread" data-thread-key="2014/07/31/2014-07-31-温度计/"
-             data-title="温度计" data-url="http://runshenzhu.github.io/2014/07/31/2014-07-31-温度计/">
+        <div class="ds-thread" data-thread-key="2015/04/27/又get了一点-线程/"
+             data-title="good good study, day day up -- thread" data-url="http://runshenzhu.github.io/2015/04/27/又get了一点-线程/">
         </div>
 
       
