@@ -20,9 +20,9 @@
 
 
 
-	<meta name="keywords" content="OS,kernel,lock," />
+	<meta name="keywords" content="OS," />
 
-  <title> REPORT_Read-Copy Update (RCU) //  </title>
+  <title> 所谓的轻量级进程 //  </title>
 </head>
 
 <body>
@@ -95,7 +95,7 @@
           
           
             
-              REPORT_Read-Copy Update (RCU)
+              所谓的轻量级进程
             
           
         </h1>
@@ -104,7 +104,7 @@
       <div class="post-meta">
         <span class="post-time">
           
-            Posted on 2014-10-30
+            Posted on 2015-08-15
           
         </span>
 
@@ -116,8 +116,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2014/10/30/2014-10-30- Report_Read-Copy Update (RCU)/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/10/30/2014-10-30- Report_Read-Copy Update (RCU)/"></span>
+            <a href="/2015/08/15/2015-08-15-the-so-called-light-process/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/15/2015-08-15-the-so-called-light-process/"></span>
             </a>
           </span>
           
@@ -132,26 +132,18 @@
         
 
         
-          <h1 id="RCU">RCU</h1><h2 id="Definition">Definition</h2><p>====<br><a id="more"></a></p>
-<ul>
-<li>Read-copy update (RCU) is yet another synchronization technique designed to protect data structures that are mostly accessed for reading by several CPUs. RCU allows many readers and many writers to proceed concurrently (an improvement over seqlocks, which allow only one writer to proceed). Moreover, RCU is lock-free, that is, it uses no lock or counter shared by all CPUs; this is a great advantage over read/write spin locks and seqlocks, which have a high overhead due to cache line-snooping and invalidation.</li>
-</ul>
-<ol>
-<li>Only data structures that are dynamically allocated and referenced by means of pointers can be protected by RCU.</li>
-<li>No kernel control path can sleep inside a critical region protected by RCU.</li>
-</ol>
-<h2 id="Reader">Reader</h2><ul>
-<li>rcu_read_lock(), which is equivalent to preempt_disable(), macro marks the beginning of the critical section. And rcu_read_unlock() macro, which is equiva- lent to preempt_enable(), implies the end of the critical section. </li>
-</ul>
-<h2 id="Writer">Writer</h2><ul>
-<li><p>When a writer wants to update the data structure, it gets a copy of this whole data structure and modifies the copy.</p>
+          <ul>
+<li><p>Now I begin my new trip in CMU and is attending 15513(aka 15213, csapp). When it comes about concurrence, instructor talks about the idea of process and thread. Instructor says that we may implement our own thread library/package in the course 15410(OS). </p>
 </li>
-<li><p>Then the writer changes the pointer to the updated copy by the mean of an atomic operation.</p>
+<li><p>A few weeks later, when I took a shower, it occurred to me that implementing a thread library might be very easy, because I already have the experiences about implementing a multi-task OS and understand the <a href="http://runshenzhu.github.io/2015/04/27/%E5%8F%88get%E4%BA%86%E4%B8%80%E7%82%B9-%E7%BA%BF%E7%A8%8B/" target="_blank" rel="external">principle of concurrence in process level</a>.</p>
 </li>
-<li><p>The old copy can be freed only after all readers have executed the rcu_read_unlock().</p>
+<li><p>In my view, a thread is just the same as process, which has a struct to describe itself. When switching, OS saves context to this struct and changes context by selecting another struct.</p>
+</li>
+<li><p>The only different things between thread and process switching is that thread switch doesn’t need to change cr3, which is used as page directory base register, and process switch has to.</p>
+</li>
+<li><p>Now I understand why thread is called lightweight process. Pthread is very similar as process. However, because OS doesn’t need to change cr3 when switching context between threads, it will have less cache misses. (When changing cr3, OS has to flash the cache, which has negative impact on performance). So switching between thread is much faster than switching between process, that’s the reason of calling thread as lightweight process.</p>
 </li>
 </ul>
-<p>REFERENCE: UNDERSTANDING THE LINUX KERNEL</p>
 
         
       </div>
@@ -166,14 +158,6 @@
                 #OS
               </a>
             
-              <a href="/tags/kernel/">
-                #kernel
-              </a>
-            
-              <a href="/tags/lock/">
-                #lock
-              </a>
-            
           </div>
         
 
@@ -181,13 +165,13 @@
           <div class="post-nav">
             <div class="post-nav-prev post-nav-item">
               
-                <a href="/2015/04/12/bootloader-and-A20-line/">bootloader and A20 line</a>
+                <a href="/9999/09/09/9999-01-01-中文简历/">简历</a>
               
             </div>
 
             <div class="post-nav-next post-nav-item">
               
-                <a href="/2014/10/15/2014-10-15-Report_Thread/">Report_Thread</a>
+                <a href="/2015/04/27/又get了一点-线程/">good good study, day day up -- thread</a>
               
             </div>
           </div>
@@ -204,8 +188,8 @@
   
     <div class="comments" id="comments">
       
-        <div class="ds-thread" data-thread-key="2014/10/30/2014-10-30- Report_Read-Copy Update (RCU)/"
-             data-title="REPORT_Read-Copy Update (RCU)" data-url="http://runshenzhu.github.io/2014/10/30/2014-10-30- Report_Read-Copy Update (RCU)/">
+        <div class="ds-thread" data-thread-key="2015/08/15/2015-08-15-the-so-called-light-process/"
+             data-title="所谓的轻量级进程" data-url="http://runshenzhu.github.io/2015/08/15/2015-08-15-the-so-called-light-process/">
         </div>
 
       
@@ -284,7 +268,7 @@
         <div class="post-toc">
           
           
-            <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RCU"><span class="nav-number">1.</span> <span class="nav-text">RCU</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Definition"><span class="nav-number">1.1.</span> <span class="nav-text">Definition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reader"><span class="nav-number">1.2.</span> <span class="nav-text">Reader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Writer"><span class="nav-number">1.3.</span> <span class="nav-text">Writer</span></a></li></ol></li></ol></div>
+            <p class="post-toc-empty">This post does not have a Table Of Contents</p>
           
         </div>
         <div class="post-toc-indicator-bottom post-toc-indicator"></div>
