@@ -133,15 +133,15 @@
 
         
           <ul>
-<li><p>Now I begin my new trip in CMU and is attending 15513(aka 15213, csapp). When it comes about concurrence, instructor talks about the idea of process and thread. Instructor says that we may implement our own thread library/package in the course 15410(OS). </p>
+<li><p>Now I begin my new trip in CMU and is attending 15513(aka 15213, csapp). When it comes about concurrence, instructor talks about the idea of process and thread. He says that we may implement our own thread library/package in the course 15410(OS). </p>
 </li>
-<li><p>A few weeks later, when I took a shower, it occurred to me that implementing a thread library might be very easy, because I already have the experiences about implementing a multi-task OS and understand the <a href="http://runshenzhu.github.io/2015/04/27/%E5%8F%88get%E4%BA%86%E4%B8%80%E7%82%B9-%E7%BA%BF%E7%A8%8B/" target="_blank" rel="external">principle of concurrence in process level</a>.</p>
+<li><p>A few weeks later, when I took a shower, it occurred to me that implementing a thread library might be very easy, because I already have the experiences about implementing a <a href="https://github.com/runshenzhu/6.828-MIT-OS" target="_blank" rel="external">multi-task OS</a> and understand the <a href="https://github.com/runshenzhu/6.828-MIT-OS" target="_blank" rel="external">principle of concurrence in process level</a>.</p>
 </li>
 <li><p>In my view, a thread is just the same as process, which has a struct to describe itself. When switching, OS saves context to this struct and changes context by selecting another struct.</p>
 </li>
-<li><p>The only different things between thread and process switching is that thread switch doesn’t need to change cr3, which is used as page directory base register, and process switch has to.</p>
+<li><p>The only different thing between thread and process switching is that thread switch doesn’t need to change cr3, which is used as page directory base register, and process switch has to.</p>
 </li>
-<li><p>Now I understand why thread is called lightweight process. Pthread is very similar as process. However, because OS doesn’t need to change cr3 when switching context between threads, it will have less cache misses. (When changing cr3, OS has to flash the cache, which has negative impact on performance). So switching between thread is much faster than switching between process, that’s the reason of calling thread as lightweight process.</p>
+<li><p>Now I understand why thread is called lightweight process. Thread is very similar as process. However, because OS doesn’t need to change cr3 when switching context between threads, it will have less cache misses. (When changing cr3, OS has to flush the cache, which has negative impact on performance). So switching between thread is much faster than switching between process, that’s the reason of calling thread as lightweight process.</p>
 </li>
 </ul>
 
